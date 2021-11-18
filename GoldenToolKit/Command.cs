@@ -10,11 +10,10 @@ namespace GoldenToolKit
     public class Command : ICommand
     {
         Action<object> executeMethod;
-        //Func<object, bool> canexecuteMethod , Func<object, bool> canexecuteMethod;
         public Command(Action<object> executeMethod)
         {
             this.executeMethod = executeMethod;
-            //this.canexecuteMethod = canexecuteMethod;
+           
         }
         public bool CanExecute(object parameter)
         {
