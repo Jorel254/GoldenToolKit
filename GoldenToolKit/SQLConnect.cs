@@ -11,8 +11,9 @@ namespace GoldenToolKit
 
         public SqlConnection Connection { get;  set; }
         public SqlCommand Command { get;  set; }
-        public SQLConnect() 
-        { 
+        public SqlDataReader Reader { get; set; }
+        public SQLConnect()
+        {
         }
 
 
@@ -54,11 +55,33 @@ namespace GoldenToolKit
             }
             Command.ExecuteNonQuery();
         }
+        public List<string> Read(SqlConnection connection, string SP,params SqlParameter[] parameters)
+        {
+            List<string> values = new List<string>();
+            Command = new SqlCommand(SP, connection)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+            foreach (SqlParameter param in parameters)
+            {
+                Command.Parameters.AddWithValue(param.ParameterName, param.Value);
+            }
+            Reader = Command.ExecuteReader();
+            while (Reader.Read())
+            {
+                for (int i = 0; i < Reader.FieldCount; i++)
+                {
+                    values.Add(Reader[i].ToString());
+                }
+               
+            }
+            return values;
+        }
         private static string BuildConnection(string BaseName, string Server, string Port, string User, string Password)
         {
             string cadena="";
             cadena += "Data Source=";
-            cadena += Server + "\\SQLEXPRESS";
+            cadena += Server + "\\MSSQLSERVER";
             cadena += !string.IsNullOrEmpty(Port) ? "," + Port + ";" : ";";
             cadena += "Initial Catalog=" + BaseName;
             if (string.IsNullOrEmpty(User) && string.IsNullOrEmpty(Password))
