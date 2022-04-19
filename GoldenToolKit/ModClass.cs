@@ -1,56 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GoldenToolKit
+﻿namespace GoldenToolKit
 {
     public class ModClass
     {
-        public static List<int> MultiTable { get; set; }= new List<int>();
 
         public static int ManualMod(int FirstValue, int ModValue)
         {
-            int temp = 0;
-            int multiplicative=0;
+            int multiplicative;
             int OpResult;
-            if (MultiTable.Count <= 0 || MultiTable is null)
+            int i = 1;
+            do
             {
-                for (int i = 1; i <= 10; i++)
-                {
-                    temp = ModValue * i;
-                    MultiTable.Add(temp);
-                }
-            }
+                multiplicative = ModValue * i;
+                i++;
+            } while (multiplicative < FirstValue);
+
+            if (multiplicative > FirstValue)
+                multiplicative -= ModValue;
+
             if (ModValue < 0)
             {
-                temp*=-1;
+                multiplicative *= -1;
             }
-            foreach (var item in MultiTable)
+            if (multiplicative <= FirstValue)
             {
-                
-                if (item <=FirstValue)
-                {
-                    multiplicative = item;
-                }else
-                {
-                    break;
-                }
+                OpResult = FirstValue - multiplicative;
+
             }
-                if (multiplicative <= FirstValue)
-                {
-                    OpResult = FirstValue - multiplicative;
-                   
-                }
-                else
-                {
-                    OpResult = FirstValue;
-                   
-                }
+            else
+            {
+                OpResult = FirstValue;
+
+            }
             return OpResult;
-        }
-        public static void ClearMod()
-        {
-            MultiTable.Clear();
         }
     }
 }
